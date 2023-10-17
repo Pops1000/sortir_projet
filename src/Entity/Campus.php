@@ -16,6 +16,8 @@ class Campus
     private $id;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[Assert\Length(255)]
+    #[Assert\NotBlank(message:"Veuillez renseigner un nom de campus")]
     private $nom;
 
     #[ORM\OneToMany(mappedBy: 'campus', targetEntity: Sortie::class)]

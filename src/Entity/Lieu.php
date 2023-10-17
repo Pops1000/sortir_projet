@@ -6,6 +6,7 @@ use App\Repository\LieuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LieuRepository::class)]
 class Lieu
@@ -15,10 +16,19 @@ class Lieu
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 50)]
+    #[Assert\NotBlank(message:"Veuillez renseigner un nom de Lieu")]
+    #[Assert\Unique(message: "erreur")]
+    #[Assert\Length(50)]
+    #[Assert\Regex(pattern: "^[A-Za-z\s]+$", message: "'Le nom n\'est pas valide.'")]
+    //TODO : Affiner la regex
+        //TODO : Messages d'erreurs à gerer
+
     private $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message:"Veuillez renseigner un nom de rue")]
+    #[Assert\Length(255)]
     private $rue;
 
     #[ORM\Column(type: 'float', nullable: true)]

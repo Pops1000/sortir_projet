@@ -6,10 +6,13 @@ use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
+#[UniqueEntity('mail')]
 class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -18,9 +21,13 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Assert\Length(180)]
+    #[Assert\Email(message: 'Email invalide')]
     private $mail;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string',length: 100)]
+    #[Assert\NotBlank(message:"Veuillez renseigner un mot de passe")]
+    #[Assert\Length(100)]
     private $motPasse;
 
     /**
@@ -29,15 +36,22 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Length(255)]
+    #[Assert\NotBlank(message:"Veuillez renseigner un nom")]
     private $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Length(255)]
+    #[Assert\NotBlank(message:"Veuillez renseigner un prenom")]
     private $prenom;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 20)]
+    #[Assert\Length(20)]
+    #[Assert\NotBlank(message:"Veuillez renseigner un nom")]
     private $telephone;
 
     #[ORM\Column(type: 'boolean')]
+
     private $administrateur;
 
     #[ORM\Column(type: 'boolean')]
@@ -52,6 +66,9 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToMany(targetEntity: Sortie::class, inversedBy: 'participants')]
     private $sortiesParticipant;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $pseudo;
 
     public function __construct()
     {
@@ -269,6 +286,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeSortiesParticipant(Sortie $sortiesParticipant): self
     {
         $this->sortiesParticipant->removeElement($sortiesParticipant);
+
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): self
+    {
+        $this->pseudo = $pseudo;
 
         return $this;
     }

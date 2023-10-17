@@ -6,6 +6,7 @@ use App\Repository\VilleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VilleRepository::class)]
 class Ville
@@ -15,10 +16,17 @@ class Ville
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 100)]
+    #[Assert\NotBlank(message:"Veuillez renseigner un nom de ville")]
+    #[Assert\Unique(message: "erreur")]
+    #[Assert\Length(100)]
+    #[Assert\Regex(pattern: "^[A-Za-z\s]+$", message: "'Le nom n\'est pas valide.'")]
     private $nom;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string',length: 5)]
+    #[Assert\Length(5)]
+    #[Assert\NotBlank(message:"Veuillez renseigner le code postal")]
+    #[Assert\Regex(pattern: "\d/")]
     private $codePostal;
 
     #[ORM\OneToMany(mappedBy: 'ville', targetEntity: Lieu::class)]
