@@ -15,7 +15,7 @@ class Campus
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $nom;
 
     #[ORM\OneToMany(mappedBy: 'campus', targetEntity: Sortie::class)]
@@ -23,6 +23,8 @@ class Campus
 
     #[ORM\OneToMany(mappedBy: 'campus', targetEntity: Participant::class)]
     private $participants;
+
+
 
     public function __construct()
     {
@@ -106,4 +108,5 @@ class Campus
 
         return $this;
     }
+
 }

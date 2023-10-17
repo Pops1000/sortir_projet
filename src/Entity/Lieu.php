@@ -21,10 +21,10 @@ class Lieu
     #[ORM\Column(type: 'string', length: 255)]
     private $rue;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: 'float', nullable: true)]
     private $latitude;
 
-    #[ORM\Column(type: 'float')]
+    #[ORM\Column(type: 'float', nullable: true)]
     private $longitude;
 
     #[ORM\ManyToOne(targetEntity: Ville::class, inversedBy: 'lieux')]

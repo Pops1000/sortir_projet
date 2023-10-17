@@ -15,7 +15,7 @@ class Etat
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, unique: true)]
     private $libelle;
 
     #[ORM\OneToMany(mappedBy: 'etat', targetEntity: Sortie::class)]

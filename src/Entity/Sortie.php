@@ -24,7 +24,7 @@ class Sortie
     #[ORM\Column(type: 'integer')]
     private $duree;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: 'date')]
     private $dateLimiteInscription;
 
     #[ORM\Column(type: 'integer')]
@@ -45,7 +45,10 @@ class Sortie
     #[ORM\JoinColumn(nullable: false)]
     private $campus;
 
-    #[ORM\ManyToOne(targetEntity: Participant::class, inversedBy: 'sorties')]
+
+
+
+    #[ORM\ManyToOne(targetEntity: Participant::class, inversedBy: 'sortiesOrganisateur')]
     #[ORM\JoinColumn(nullable: false)]
     private $organisateur;
 
