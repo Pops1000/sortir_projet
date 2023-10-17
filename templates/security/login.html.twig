@@ -23,6 +23,11 @@
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
     >
+    <label>
+        <input type="checkbox" name="_remember_me" checked>
+        Remember me
+    </label>
+
 
     {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
