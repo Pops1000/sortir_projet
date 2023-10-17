@@ -23,7 +23,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\Length(180)]
     #[Assert\Email(message: 'Email invalide')]
-    private $email;
+    private $mail;
 
     #[ORM\Column(type: 'string',length: 100)]
     #[Assert\NotBlank(message:"Veuillez renseigner un mot de passe")]
@@ -83,12 +83,12 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getMail(): ?string
     {
-        return $this->email;
+        return $this->mail;
     }
 
     public function setMail(string $mail): self
     {
-        $this->email = $mail;
+        $this->mail = $mail;
 
         return $this;
     }
@@ -100,7 +100,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string) $this->mail;
     }
 
     /**
@@ -108,7 +108,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->mail;
     }
 
     /**
@@ -131,7 +131,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->motPasse;
     }
 
-    public function getMotPasse()
+    public function getMotPasse(): string
+
     {
         return $this->motPasse;
     }
