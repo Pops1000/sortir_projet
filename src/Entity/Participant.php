@@ -70,11 +70,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private $pseudo;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
-
     public function __construct()
     {
         $this->sortiesOrganisateur = new ArrayCollection();
@@ -121,10 +116,6 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        //TODO apprendre a dev...
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-
         $roles[] = 'ROLE_USER';
 
         if($this->isIsAdministrateur()){
