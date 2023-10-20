@@ -66,6 +66,7 @@ class Sortie
     #[ORM\ManyToMany(targetEntity: Participant::class, mappedBy: 'sortiesParticipant')]
     private $participants;
 
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -226,6 +227,13 @@ class Sortie
     public function getVille(): ?Ville
     {
         return $this->lieu->getVille();
+    }
+
+    public function getIsParticipant(Participant $participant): string
+    {
+        $isParticipant =  ($this->participants->contains($participant))? "oui" : "non";
+        dump($isParticipant);
+        return $isParticipant;
     }
 
 }

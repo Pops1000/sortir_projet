@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Sortie;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\CreationSortieType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
