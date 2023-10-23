@@ -54,6 +54,7 @@ class SortieController extends AbstractController
             'creationSortie' => $creationSortie->createView(),
         ]);
     }
+
     #[Route(path: '/sorties', name: 'app_sorties')]
     public function sorties(EntityManagerInterface $em, Request $request): Response
     {
@@ -65,6 +66,33 @@ class SortieController extends AbstractController
             'controller_name' => 'SortieController',
             'searchForm' => $searchForm->createView(),
             'sorties' => $sorties,
-        ]);}}
+        ]);
+    }
+
+    #[Route(path: '/inscription/{id}',name: "inscription_sortie")]
+    public function inscriptionSortie(Sortie $sortie): Response
+    {
+        $participant = $this->getUser();
+
+        if (!$sortie->getParticipants()->contains($participant)){
+            $sortie->addParticipant($participant);
+
+            $em=$this->getDoctrine()->getManager();
+            $em->flush();;
+
+            return $this->redirectToRoute('app_main');
 
 
+        }
+        return $this->redirectToRoute('app_main');
+
+    }
+    #[Route("/sortie/{id}",name: "sortie_detail")]
+    public function sortieDetails(Sortie$sortie): Response
+    {
+        return $this->render('sortie/detail.html.twig',[
+            'sortie'=>$sortie,
+        ]);
+
+    }
+}
