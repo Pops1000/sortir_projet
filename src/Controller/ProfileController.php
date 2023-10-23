@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[Route('/profile', name: 'app_profile')]
 class ProfileController extends AbstractController
@@ -29,7 +30,7 @@ class ProfileController extends AbstractController
             $newPassword = $profileForm->get('newPassword')->getData();
             if (null != $newPassword) {
                 // hasher le nouveau mot de passe et l'utiliser dans le setter
-                $mdpCripte=$passwordHasher->hashPassword(XXXXXXXX,$newPassword);
+                $mdpCripte=$passwordHasher->hashPassword( $participant,$newPassword);
 
                 $participant->setMotPasse($mdpCripte);
 

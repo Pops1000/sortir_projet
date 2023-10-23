@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello SortiesController!{% endblock %}
+{% form_theme searchForm "bootstrap_3_layout.html.twig" %}
 {%  set myArray =['apple'] %}
 {% block body %}
 <style>
@@ -17,6 +18,8 @@
         <li>Your template at <code><a href="{{ 'C:/laragon/www/sortir_projet/templates/sorties/index.html.twig'|file_link(0) }}">templates/sorties/index.html.twig</a></code></li>
     </ul>
 </div>
+
+    {{ form(searchForm) }}
     <table class="table table-stripped table-hover table-bordered">
         <thead class="table-dark">
         <tr>

@@ -26,7 +26,7 @@ class SortieParticipantFixtures extends Fixture implements DependentFixtureInter
             $participant->setPrenom("Prenom $i");
             $participant->setTelephone("Telephone $i");
             $participant->setPseudo("Pseudo $i");
-            $participant->setMotPasse("mdp $i");
+            $participant->setMotPasse($i);
             $isAdmin = (bool)random_int(0, 1);
             $participant->setIsAdministrateur($isAdmin);
             $isActif = (bool)random_int(0, 1);
