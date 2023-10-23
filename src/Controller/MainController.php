@@ -15,11 +15,9 @@ class MainController extends AbstractController
 
         $entityManager = $this->getDoctrine()->getManager();
         $participants= $entityManager->getRepository(Sortie::class)->findAll();
-        return $this->render('main/index.html.twig', [
-            'controller_name' => 'MainController',
-            'participants' => $participants,
+        return $this->redirectToRoute('app_sorties');
 
-        ]);
+
     }
 
     #[Route('/test', name: 'app_test')]
