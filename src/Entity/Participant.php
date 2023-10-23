@@ -21,13 +21,13 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    #[Assert\Length(180)]
+    #[Assert\Length(max:180)]
     #[Assert\Email(message: 'Email invalide')]
     private $mail;
 
     #[ORM\Column(type: 'string',length: 100)]
     #[Assert\NotBlank(message:"Veuillez renseigner un mot de passe")]
-    #[Assert\Length(100)]
+    #[Assert\Length(max:100)]
     private $motPasse;
 
     /**
@@ -36,17 +36,17 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\Length(255)]
+    #[Assert\Length(max:255)]
     #[Assert\NotBlank(message:"Veuillez renseigner un nom")]
     private $nom;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\Length(255)]
+    #[Assert\Length(max:255)]
     #[Assert\NotBlank(message:"Veuillez renseigner un prenom")]
     private $prenom;
 
     #[ORM\Column(type: 'string', length: 20)]
-    #[Assert\Length(20)]
+    #[Assert\Length(max:20)]
     #[Assert\NotBlank(message:"Veuillez renseigner un nom")]
     private $telephone;
 

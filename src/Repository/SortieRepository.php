@@ -39,6 +39,26 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
+
+
+    public function findAllSorties(): array
+    {
+
+        $res =  $this->createQueryBuilder('s')
+
+            ->addSelect('e')
+            ->join('s.etat', 'e')
+            ->addSelect('o')
+            ->join('s.organisateur', 'o')
+            //->addSelect('p')
+            //->join('o.pseudo', 'p')
+            ->where('e.id != 5')
+            ->getQuery()
+            ->getResult()
+        ;
+        dump($res);
+        return $res;
+    }
 //    /**
 //     * @return Sortie[] Returns an array of Sortie objects
 //     */

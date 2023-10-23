@@ -3,8 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Sortie;
-use App\Form\CreationSortieType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\CreationSortieType;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,7 +44,7 @@ class SortieController extends AbstractController
             $em->persist($sortie);
             $em->flush();
 
-            return $this->redirectToRoute('/');
+            return $this->redirectToRoute(route: '/');
         }
 
 
@@ -52,5 +53,13 @@ class SortieController extends AbstractController
             'creationSortie' => $creationSortie->createView(),
         ]);
     }
-}
+    #[Route(path: '/sorties', name: 'app_sorties')]
+    public function sorties(EntityManagerInterface $em): Response
+    {
+        $sorties = $em->getRepository(Sortie::class)->findAll();
+        return $this->render('sorties/index.html.twig', [
+            'controller_name' => 'SortieController',
+            'sorties' => $sorties,
+        ]);}}
+
 

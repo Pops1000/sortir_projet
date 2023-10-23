@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SortiesController!{% endblock %}
+{%  set myArray =['apple'] %}
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ 'C:/laragon/www/sortir_projet/src/Controller/SortieController.php'|file_link(0) }}">src/Controller/SortiesController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'C:/laragon/www/sortir_projet/templates/sorties/index.html.twig'|file_link(0) }}">templates/sorties/index.html.twig</a></code></li>
+    </ul>
+</div>
+    <table class="table table-stripped table-hover table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th>Nom de la sortie</th>
+            <th>Date de la sortie</th>
+            <th>Clôture</th>
+            <th>Nombre d'inscrits</th>
+            <th>Etat</th>
+            <th>Inscrit</th>
+            <th>Organisateur</th>
+            <th>Actions</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for sortie in sorties %}
+            <tr>
+                <td>{{ sortie.nom }}</td>
+                <td>{{ sortie.dateHeureDebut|date("d/m/y H:i") }}</td>
+                <td>{{ sortie.dateLimiteInscription | date("d/m/y H:i") }}</td>
+                <td>{{ sortie.participants| length }}/{{ sortie.nbInscriptionsMax}} </td>
+                <td>{{ sortie.etat.libelle }}</td>
+                <td>{% if app.user in sortie.participants %}oui {% else %} non{% endif %}</td>
+                <td>{{ sortie.organisateur.pseudo }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+
+
+{% endblock %}
