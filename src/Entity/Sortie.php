@@ -223,5 +223,9 @@ class Sortie
 
         return $this;
     }
+    public function getVille(): ?Ville
+    {
+        return $this->lieu->getVille();
+    }
 
 }
