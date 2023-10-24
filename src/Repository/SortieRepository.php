@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Data\SearchData;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use function PHPUnit\Framework\isNull;
 
 /**
  * @extends ServiceEntityRepository<Sortie>
@@ -43,21 +45,69 @@ class SortieRepository extends ServiceEntityRepository
 
     public function findAllSorties(): array
     {
-
         $res =  $this->createQueryBuilder('s')
 
             ->addSelect('e')
             ->join('s.etat', 'e')
             ->addSelect('o')
             ->join('s.organisateur', 'o')
-            //->addSelect('p')
-            //->join('o.pseudo', 'p')
+            ->addSelect('p')
+            ->join('s.participants', 'p')
+                // on ne sélectionne que les sorties qui ne sont pas
             ->where('e.id != 5')
             ->getQuery()
             ->getResult()
         ;
         dump($res);
         return $res;
+    }
+
+    public function findByFilter(SearchData $searchData): array {
+        $res = $this->createQueryBuilder('s')
+
+            ->addSelect('e')
+            ->join('s.etat', 'e')
+            ->addSelect('o')
+            ->join('s.organisateur', 'o')
+            ->addSelect('p')
+            ->join('s.participants', 'p');
+
+        if(!isNull($searchData->q)){
+            $res = $res
+                ->andWhere('s.nom LIKE :q')
+                ->setParameter('q', "%{$searchData->q}%");
+        }
+
+        if(!isNull($searchData->campus)){
+            $res = $res
+                ->andWhere('s.campus = :campus')
+                ->setParameter('campus', $searchData->campus);
+        }
+        if(!isNull($searchData->dateDebut)){
+            $res = $res
+                ->andWhere('s.dateHeureDebut >= :dateDebut')
+                ->setParameter('dateDebut', $searchData->dateDebut);
+        }
+        if(!isNull($searchData->dateFin)){
+            $res = $res
+                ->andWhere('s.dateHeureDebut <= :dateFin')
+                ->setParameter('dateFin', $searchData->dateFin);
+        }
+        if($searchData->isOrganisateur){
+            $res = $res
+                ->andWhere('s.organisateur = :organisateur')
+                ->setParameter('organisateur', $searchData->isOrganisateur);
+        }
+        if($searchData->isInscrit){
+            $res = $res
+                ->andWhere('s.participant = :participant')
+                ->setParameter('participants', $searchData->isParticipant);
+        }
+
+
+        return $res
+            ->getQuery()
+            ->getResult();
     }
 //    /**
 //     * @return Sortie[] Returns an array of Sortie objects

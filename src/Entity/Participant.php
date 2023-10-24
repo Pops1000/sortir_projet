@@ -229,8 +229,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getCampus(): ?Campus
     {
-        $dump = $this->campus;
-        return Dump($dump);
+        return $this->campus;
     }
 
     public function setCampus(?Campus $campus): self

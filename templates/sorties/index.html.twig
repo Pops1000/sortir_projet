@@ -32,7 +32,12 @@
         </ul>
     </div>
 
-    {{ form(searchForm) }}
+    {{ form_start(searchForm) }}
+    {{ form_widget(searchForm) }}
+    <button type="submit" class="btn btn-primary">Rechercher</button>
+    {{ form_end(searchForm) }}
+
+
     <table class="table table-stripped table-hover table-bordered">
         <thead class="table-dark">
         <tr>
@@ -55,14 +60,14 @@
                 <td>{{ sortie.dateLimiteInscription | date("d/m/y H:i") }}</td>
                 <td>{{ sortie.participants| length }}/{{ sortie.nbInscriptionsMax }} </td>
                 <td>{{ sortie.etat.libelle }}</td>
-                <td>{% if sortie in app.user.sortiesParticipant %}oui {% else %} non{% endif %}</td>
+                <td>{% if sortie.isParticipant(app.user) %}oui {% else %} non{% endif %}</td>
                 <td>{{ sortie.organisateur.pseudo }}</td>
                 <td>
                     {% if sortie.organisateur == app.user %}
                     <a href="{{ path('sortie_modifier',{'id':sortie.id}) }}">Modifier</a>
                     {% endif %}
 
-                    {% if sortie not in app.user.sortiesParticipant %}
+                    {% if sortie.isParticipant(app.user) %}
                         - <a href="{{ path('inscription_sortie',{'id': sortie.id}) }}">S'iscrire</a>
                     {% endif %}
                     -<a href="{{ path('sortie_detail',{'id':sortie.id}) }}">Afficher</a>

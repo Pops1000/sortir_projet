@@ -25,7 +25,26 @@
 {# la nav iclus le header #}
 {% include ('inc/nav.html.twig') %}
 
+{% for label, messages in app.flashes %}
+    {% if label=='success' %}
+        {% for message in messages %}
+            <div class="flash-{{ label }} alert alert-success text-center" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if label=='error' %}
+        {% for message in messages %}
+            <div class="flash-{{ label }} alert alert-warning text-center" role="alert">
+                {{ message }}
+            </div>
 
-{% block body %}{% endblock %}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+
+{% block body %}
+
+{% endblock %}
 </body>
 </html>

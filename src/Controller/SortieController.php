@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Etat;
+use App\Data\SearchData;
 use App\Entity\Sortie;
+use App\Form\FilterSortiesType;
 use App\Form\SearchForm;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,20 +30,17 @@ class SortieController extends AbstractController
 
         $creationSortie = $this->createForm(CreationSortieType::class, $sortie);
 
-
         $creationSortie->handleRequest($request);
 
         if ($creationSortie->isSubmitted() && $creationSortie->isValid()) {
             $lieu = $sortie->getLieu();
             $ville = $lieu->getVille();
-            $campus = $sortie->getCampus();
+
 
             if ($ville->getId() === null) {
                 $em->persist($ville);
             }
-            if ($campus->getId() === null) {
-                $em->persist($campus);
-            }
+
 
             if ($lieu->getId() === null) {
                 $em->persist($lieu);
@@ -67,13 +65,15 @@ class SortieController extends AbstractController
     #[Route(path: '/sorties', name: 'app_sorties')]
     public function sorties(EntityManagerInterface $em, Request $request): Response
     {
-        $searchForm = $this->createForm(SearchForm::class);
-        $searchForm->handleRequest($request);
+        $data = new SearchData();
 
-        $sorties = $em->getRepository(Sortie::class)->findAll();
+        $form = $this->createForm(FilterSortiesType::class, $data);
+        $form->handleRequest($request);
+
+        $sorties = $em->getRepository(Sortie::class)->findByFilter($data);
         return $this->render('sorties/index.html.twig', [
             'controller_name' => 'SortieController',
-            'searchForm' => $searchForm->createView(),
+            'searchForm' => $form->createView(),
             'sorties' => $sorties,
         ]);
     }
@@ -115,7 +115,7 @@ class SortieController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $lieu = $sortie->getLieu();
+            $lieu=$sortie->getLieu();
             $ville = $lieu->getVille();
             if ($ville->getId() === null) {
                 $em->persist($ville);

@@ -2,12 +2,13 @@
 namespace App\Data;
 
 use App\Entity\Campus;
+use DateTime;
 
 class SearchData {
-    public string $q = '';
-    public array $campus = [];
-    public DateTime $dateDebut;
-    public DateTime $dateFin;
+    public ?string $q = "oscar";
+    public  ?Campus $campus = null;
+    public ?DateTime $dateDebut = null ;
+    public ?DateTime $dateFin = null;
     public bool $isOrganisateur = false;
     public bool $isInscrit = false;
     public bool $isNotInscrit = false;
