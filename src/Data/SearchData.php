@@ -5,7 +5,7 @@ use App\Entity\Campus;
 use DateTime;
 
 class SearchData {
-    public ?string $q = "oscar";
+    public ?string $q = null;
     public  ?Campus $campus = null;
     public ?DateTime $dateDebut = null ;
     public ?DateTime $dateFin = null;

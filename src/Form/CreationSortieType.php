@@ -20,7 +20,6 @@ class CreationSortieType extends AbstractType
     {
         $builder
             ->add('nom')
-
             ->add('dateHeureDebut', DateTimeType::class, [
                 'widget' => 'choice',
                 'html5' => true,

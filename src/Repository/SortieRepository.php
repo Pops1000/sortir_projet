@@ -44,6 +44,7 @@ class SortieRepository extends ServiceEntityRepository
 
 
     public function findByFilter(SearchData $searchData): array {
+
         $res = $this->createQueryBuilder('s')
 
             ->addSelect('e')
@@ -53,10 +54,11 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('p')
             ->join('s.participants', 'p');
 
-        if(!isNull($searchData->q)){
+        if(!is_null($searchData->q)){
             $res = $res
                 ->andWhere('s.nom LIKE :q')
                 ->setParameter('q', "%{$searchData->q}%");
+
         }
 
         if(!isNull($searchData->campus)){
@@ -78,9 +80,10 @@ class SortieRepository extends ServiceEntityRepository
 
 
 
-        return $res
+       return  $res
             ->getQuery()
             ->getResult();
+
     }
 //    /**
 //     * @return Sortie[] Returns an array of Sortie objects
