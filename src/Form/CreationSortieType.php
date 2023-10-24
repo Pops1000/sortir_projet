@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Form;
-
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
 use App\Entity\Ville;
@@ -17,7 +17,11 @@ class CreationSortieType extends AbstractType
     {
         $builder
             ->add('nom')
-            ->add('dateHeureDebut')
+            ->add('dateHeureDebut',DateTimeType::class,[
+                'widget'=>'single_text',
+                'format'=>'hh:mm dd/MM/yyyy',
+                'html5' => false,
+            ])
             ->add('duree')
             ->add('dateLimiteInscription')
             ->add('nbInscriptionsMax')
