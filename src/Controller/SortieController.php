@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
+use App\Data\SearchData;
 use App\Entity\Sortie;
-use App\Form\SearchForm;
+use App\Form\FilterSortiesType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\CreationSortieType;
@@ -57,13 +58,15 @@ class SortieController extends AbstractController
     #[Route(path: '/sorties', name: 'app_sorties')]
     public function sorties(EntityManagerInterface $em, Request $request): Response
     {
-        $searchForm = $this->createForm(SearchForm::class);
-        $searchForm->handleRequest($request);
+        $data = new SearchData();
 
-        $sorties = $em->getRepository(Sortie::class)->findAll();
+        $form = $this->createForm(FilterSortiesType::class, $data);
+        $form->handleRequest($request);
+
+        $sorties = $em->getRepository(Sortie::class)->findByFilter($data);
         return $this->render('sorties/index.html.twig', [
             'controller_name' => 'SortieController',
-            'searchForm' => $searchForm->createView(),
+            'searchForm' => $form->createView(),
             'sorties' => $sorties,
         ]);}}
 
