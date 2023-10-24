@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello SortieController!{% endblock %}
+{% form_theme creationSortie "bootstrap_3_layout.html.twig" %}
 
 {% block body %}
 <style>
@@ -13,17 +14,12 @@
 
         {{ form_start(creationSortie) }}
         {{ form_row(creationSortie.nom) }}
-        {{ form_row(creationSortie.dateHeureDebut) }}
+        {{ form_row(creationSortie.dateHeureDebut)}}
         {{ form_row(creationSortie.duree) }}
         {{ form_row(creationSortie.dateLimiteInscription) }}
         {{ form_row(creationSortie.nbInscriptionsMax) }}
         {{ form_row(creationSortie.infosSortie) }}
         {{ form_row(creationSortie.lieu) }}
-
-
-
-
-
 
         <button type="submit">Enregistrer</button>
 

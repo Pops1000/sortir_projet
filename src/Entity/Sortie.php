@@ -6,7 +6,7 @@ use App\Repository\SortieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Integer;
+
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -26,12 +26,11 @@ class Sortie
     private $nom;
 
     #[ORM\Column(type: 'datetime')]
-    #[Assert\DateTime(format: "hh:mm dd/MM/yyyy")]
     private $dateHeureDebut;
 
     #[ORM\Column(type: 'integer')]
-    #[Assert\Range(min: 1,max: 480, notInRangeMessage :" La valeur doit être comprise entre {{ min }} et {{ max }}.")]
-    #[Assert\Type(Integer::class)]
+    #[Assert\Range(min: 0,max: 480, notInRangeMessage :" La valeur doit être comprise entre {{ min }} et {{ max }}.")]
+
 
     private $duree;
 

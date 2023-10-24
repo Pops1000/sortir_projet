@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Form\SearchForm;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\CreationSortieType;
@@ -11,41 +13,48 @@ use App\Form\CreationSortieType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Date;
 
 class SortieController extends AbstractController
 {
     #[Route(path: '/sortie', name: 'app_sortie')]
-    public function createSortie(Request $request): Response
+    public function createSortie(Request $request,EntityManagerInterface $em): Response
     {
         $sortie = new Sortie();
+        $sortie->setOrganisateur($this->getUser());
+        $sortie->setEtat($em->getRepository(Etat::class)->find(1));
+        $sortie->setCampus($this->getUser()->getCampus());
+        $sortie->setDateHeureDebut(new \DateTime());
+        $sortie->setDateLimiteInscription(new \DateTime());
+
         $creationSortie = $this->createForm(CreationSortieType::class, $sortie);
+
 
         $creationSortie->handleRequest($request);
 
         if ($creationSortie->isSubmitted() && $creationSortie->isValid()) {
             $lieu = $sortie->getLieu();
             $ville = $lieu->getVille();
-            $em = $this->getDoctrine()->getManager();
+            $campus = $sortie->getCampus();
 
             if ($ville->getId() === null) {
                 $em->persist($ville);
             }
-
+            if ($campus->getId() === null) {
+                $em->persist($campus);
+            }
 
             if ($lieu->getId() === null) {
                 $em->persist($lieu);
             }
 
-            $organisateur = $this->getUser();
-            $sortie->setOrganisateur($organisateur);
 
-            $lieu->setVille($ville);
             $em->persist($lieu);
 
             $em->persist($sortie);
             $em->flush();
 
-            return $this->redirectToRoute(route: '/');
+            return $this->redirectToRoute(route: 'app_sorties');
         }
 
 
@@ -96,7 +105,8 @@ class SortieController extends AbstractController
         ]);
 
     }
-    #[Route(path:"sortie/modifier/{id}",name:"sortie_modifier")]
+
+    #[Route(path: "sortie/modifier/{id}", name: "sortie_modifier")]
     public function modifierSortie(Sortie $sortie, Request $request): Response
     {
 
@@ -105,7 +115,7 @@ class SortieController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $lieu=$sortie->getLieu();
+            $lieu = $sortie->getLieu();
             $ville = $lieu->getVille();
             if ($ville->getId() === null) {
                 $em->persist($ville);

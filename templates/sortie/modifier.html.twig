@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Modifier la Sortie{{ sortie.nom }}{% endblock %}
+{% form_theme sortieForm "bootstrap_3_layout.html.twig" %}
 
 {% block body %}
     <h1>Modifier la Sortie "{{ sortie.nom }}"</h1>
