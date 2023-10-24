@@ -229,11 +229,9 @@ class Sortie
         return $this->lieu->getVille();
     }
 
-    public function getIsParticipant(Participant $participant): string
+    public function isParticipant(?Participant $participant): bool
     {
-        $isParticipant =  ($this->participants->contains($participant))? "oui" : "non";
-        dump($isParticipant);
-        return $isParticipant;
+        return $this->participants->contains($participant);
     }
 
 }
