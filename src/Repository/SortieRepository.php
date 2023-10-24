@@ -43,25 +43,6 @@ class SortieRepository extends ServiceEntityRepository
 
 
 
-    public function findAllSorties(): array
-    {
-        $res =  $this->createQueryBuilder('s')
-
-            ->addSelect('e')
-            ->join('s.etat', 'e')
-            ->addSelect('o')
-            ->join('s.organisateur', 'o')
-            ->addSelect('p')
-            ->join('s.participants', 'p')
-                // on ne sélectionne que les sorties qui ne sont pas
-            ->where('e.id != 5')
-            ->getQuery()
-            ->getResult()
-        ;
-        dump($res);
-        return $res;
-    }
-
     public function findByFilter(SearchData $searchData): array {
         $res = $this->createQueryBuilder('s')
 
@@ -93,16 +74,8 @@ class SortieRepository extends ServiceEntityRepository
                 ->andWhere('s.dateHeureDebut <= :dateFin')
                 ->setParameter('dateFin', $searchData->dateFin);
         }
-        if($searchData->isOrganisateur){
-            $res = $res
-                ->andWhere('s.organisateur = :organisateur')
-                ->setParameter('organisateur', $searchData->isOrganisateur);
-        }
-        if($searchData->isInscrit){
-            $res = $res
-                ->andWhere('s.participant = :participant')
-                ->setParameter('participants', $searchData->isParticipant);
-        }
+
+
 
 
         return $res

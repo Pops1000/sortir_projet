@@ -3,10 +3,9 @@
 namespace App\Controller;
 
 use App\Data\SearchData;
+use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Form\FilterSortiesType;
-use App\Form\SearchForm;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\CreationSortieType;
@@ -14,7 +13,6 @@ use App\Form\CreationSortieType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Date;
 
 class SortieController extends AbstractController
 {
@@ -24,9 +22,10 @@ class SortieController extends AbstractController
         $sortie = new Sortie();
         $sortie->setOrganisateur($this->getUser());
         $sortie->setEtat($em->getRepository(Etat::class)->find(1));
-        $sortie->setCampus($this->getUser()->getCampus());
+        $sortie->setCampus(campus: $this->getUser()->getCampus());
         $sortie->setDateHeureDebut(new \DateTime());
         $sortie->setDateLimiteInscription(new \DateTime());
+        $sortie->addParticipant($this.getUser());
 
         $creationSortie = $this->createForm(CreationSortieType::class, $sortie);
 
