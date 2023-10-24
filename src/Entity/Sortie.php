@@ -21,7 +21,7 @@ class Sortie
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank(message:"Veuillez renseigner un nom")]
-    #[Assert\Length(255)]
+    #[Assert\Length(max:255)]
     #[Assert\NoSuspiciousCharacter]
     private $nom;
 
@@ -30,7 +30,7 @@ class Sortie
     private $dateHeureDebut;
 
     #[ORM\Column(type: 'integer')]
-    #[Assert\Range(min: 60,max: 480, notInRangeMessage :" La valeur doit être comprise entre {{ min }} et {{ max }}.")]
+    #[Assert\Range(min: 1,max: 480, notInRangeMessage :" La valeur doit être comprise entre {{ min }} et {{ max }}.")]
     #[Assert\Type(Integer::class)]
 
     private $duree;

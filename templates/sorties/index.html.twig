@@ -2,22 +2,35 @@
 
 {% block title %}Hello SortiesController!{% endblock %}
 {% form_theme searchForm "bootstrap_3_layout.html.twig" %}
-{%  set myArray =['apple'] %}
+{% set myArray =['apple'] %}
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/sortir_projet/src/Controller/SortieController.php'|file_link(0) }}">src/Controller/SortiesController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/sortir_projet/templates/sorties/index.html.twig'|file_link(0) }}">templates/sorties/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="example-wrapper">
+        <h1>Hello {{ controller_name }}! ✅</h1>
+
+        This friendly message is coming from:
+        <ul>
+            <li>Your controller at <code><a
+                            href="{{ 'C:/laragon/www/sortir_projet/src/Controller/SortieController.php'|file_link(0) }}">src/Controller/SortiesController.php</a></code>
+            </li>
+            <li>Your template at <code><a
+                            href="{{ 'C:/laragon/www/sortir_projet/templates/sorties/index.html.twig'|file_link(0) }}">templates/sorties/index.html.twig</a></code>
+            </li>
+        </ul>
+    </div>
 
     {{ form(searchForm) }}
     <table class="table table-stripped table-hover table-bordered">
@@ -40,19 +53,22 @@
                 <td>{{ sortie.nom }}</td>
                 <td>{{ sortie.dateHeureDebut|date("d/m/y H:i") }}</td>
                 <td>{{ sortie.dateLimiteInscription | date("d/m/y H:i") }}</td>
-                <td>{{ sortie.participants| length }}/{{ sortie.nbInscriptionsMax}} </td>
+                <td>{{ sortie.participants| length }}/{{ sortie.nbInscriptionsMax }} </td>
                 <td>{{ sortie.etat.libelle }}</td>
                 <td>{% if sortie in app.user.sortiesParticipant %}oui {% else %} non{% endif %}</td>
                 <td>{{ sortie.organisateur.pseudo }}</td>
                 <td>
-                    {#     {% if sortie.organisateur == app.user %}
-                        <a href="{{ path("chemin_modifsortie") }}">Modifier</a>#}
-                    -
-                    {%  if sortie not in app.user.sortiesParticipant %}
-                        <a href="{{ path('inscription_sortie',{'id': sortie.id}) }}">S'iscrire</a>
+                    {% if sortie.organisateur == app.user %}
+                    <a href="{{ path('sortie_modifier',{'id':sortie.id}) }}">Modifier</a>
+                    {% endif %}
+
+                    {% if sortie not in app.user.sortiesParticipant %}
+                        - <a href="{{ path('inscription_sortie',{'id': sortie.id}) }}">S'iscrire</a>
                     {% endif %}
                     -<a href="{{ path('sortie_detail',{'id':sortie.id}) }}">Afficher</a>
+                    -
                 </td>
+                -
             </tr>
         {% endfor %}
         </tbody>
