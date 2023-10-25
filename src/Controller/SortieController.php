@@ -28,7 +28,6 @@ class SortieController extends AbstractController
         $sortie->addParticipant($this.getUser());
 
         $creationSortie = $this->createForm(CreationSortieType::class, $sortie);
-
         $creationSortie->handleRequest($request);
 
         if ($creationSortie->isSubmitted() && $creationSortie->isValid()) {
@@ -69,7 +68,7 @@ class SortieController extends AbstractController
         $form = $this->createForm(FilterSortiesType::class, $data);
         $form->handleRequest($request);
 
-        $sorties = $em->getRepository(Sortie::class)->findByFilter($data);
+        $sorties = $em->getRepository(Sortie::class)->findByFilter($data, $this->getUser());
         return $this->render('sorties/index.html.twig', [
             'controller_name' => 'SortieController',
             'searchForm' => $form->createView(),

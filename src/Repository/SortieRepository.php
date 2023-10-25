@@ -3,10 +3,10 @@
 namespace App\Repository;
 
 use App\Data\SearchData;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use function PHPUnit\Framework\isNull;
 
 /**
  * @extends ServiceEntityRepository<Sortie>
@@ -36,17 +36,15 @@ class SortieRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->remove($entity);
 
-        if ($flush) {
+        if ($flush)
             $this->getEntityManager()->flush();
-        }
     }
 
 
-
-    public function findByFilter(SearchData $searchData): array {
+    public function findByFilter(SearchData $searchData, ?Participant $user): array
+    {
 
         $res = $this->createQueryBuilder('s')
-
             ->addSelect('e')
             ->join('s.etat', 'e')
             ->addSelect('o')
@@ -54,33 +52,65 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('p')
             ->join('s.participants', 'p');
 
-        if(!is_null($searchData->q)){
+        if (!is_null($searchData->q)) {
             $res = $res
                 ->andWhere('s.nom LIKE :q')
                 ->setParameter('q', "%{$searchData->q}%");
-
         }
 
-        if(!isNull($searchData->campus)){
+        if (!is_null($searchData->campus)) {
             $res = $res
                 ->andWhere('s.campus = :campus')
                 ->setParameter('campus', $searchData->campus);
         }
-        if(!isNull($searchData->dateDebut)){
+
+        if (!is_null($searchData->dateDebut)) {
             $res = $res
                 ->andWhere('s.dateHeureDebut >= :dateDebut')
                 ->setParameter('dateDebut', $searchData->dateDebut);
         }
-        if(!isNull($searchData->dateFin)){
+
+        if (!is_null($searchData->dateFin)) {
+            $dateFin = $searchData->dateFin->modify('+1 day');
             $res = $res
                 ->andWhere('s.dateHeureDebut <= :dateFin')
-                ->setParameter('dateFin', $searchData->dateFin);
+                ->setParameter('dateFin', $dateFin);
+        }
+        if (($searchData->isOrganisateur)) {
+            if (is_null($user)) {
+                $res = [];
+            } else {
+                $res = $res
+                    ->andWhere('s.organisateur IN :organisateur')
+                    ->setParameter('organisateur', $user);
+            }
+        }
+        if (($searchData->isInscrit)) {
+            if (is_null($user)) {
+                $res = [];
+            } else {
+                $res = $res
+                    ->andWhere('p.id = :user')
+                    ->setParameter('user', $user);
+            }
+        }
+        if (($searchData->isNotInscrit)) {
+            if (is_null($user)) {
+                $res = [];
+            } else {
+                $res = $res
+                    ->andWhere('p.id != :user')
+                    ->setParameter('user', $user);
+            }
+        }
+        if (($searchData->isPassees)) {
+            $date = $searchData->dateFin->modify('+1 month');
+            $res = $res
+                ->andWhere('s.dateHeureDebut <= :date')
+                ->setParameter('date', $date);
         }
 
-
-
-
-       return  $res
+        return $res
             ->getQuery()
             ->getResult();
 
