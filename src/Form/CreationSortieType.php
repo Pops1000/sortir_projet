@@ -21,10 +21,9 @@ class CreationSortieType extends AbstractType
         $builder
             ->add('nom')
             ->add('dateHeureDebut', DateTimeType::class, [
-                'widget' => 'choice',
-                'html5' => true,
+                'widget' => 'single_text',
 
-                'date_format'=>'',
+                'html5' => true,
                 'attr' => [
                     'class' => 'js-datepicker'
                 ]

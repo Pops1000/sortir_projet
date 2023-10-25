@@ -1,12 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProfileController!{% endblock %}
+{% block title %}Mon Profil{% endblock %}
 
 {% form_theme profileForm "bootstrap_3_layout.html.twig" %}
 
+
 {% block body %}
     <div class="example-wrapper">
-        <h1>Salut {{ app.user.prenom }}! ✅</h1>
+        <h1 class="text-center">Salut {{ app.user.prenom }}! </h1>
 
 
         <div>
@@ -37,10 +38,7 @@
 
             {{ form_end(profileForm) }}
 
-            partie test a supprimer dans twig
-            {% for role in app.user.roles %}
-                <div>{{ role }}</div>
-            {% endfor %}
+
 
         </div>
 

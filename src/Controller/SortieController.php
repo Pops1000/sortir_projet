@@ -25,7 +25,7 @@ class SortieController extends AbstractController
         $sortie->setCampus(campus: $this->getUser()->getCampus());
         $sortie->setDateHeureDebut(new \DateTime());
         $sortie->setDateLimiteInscription(new \DateTime());
-        $sortie->addParticipant($this.getUser());
+        $sortie->addParticipant($this->getUser());
 
         $creationSortie = $this->createForm(CreationSortieType::class, $sortie);
         $creationSortie->handleRequest($request);
