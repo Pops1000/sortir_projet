@@ -83,33 +83,33 @@ class SortieRepository extends ServiceEntityRepository
                 $res = $res
                     ->andWhere('s.organisateur IN :organisateur')
                     ->setParameter('organisateur', $user);
-        }
-        if (($searchData->isInscrit)) {
+            }
+            if (($searchData->isInscrit)) {
                 $res = $res
                     ->andWhere('p.id = :user')
                     ->setParameter('user', $user);
-        }
-        if (($searchData->isNotInscrit)) {
-            $res = $res
+            }
+            if (($searchData->isNotInscrit)) {
+                $res = $res
                     ->andWhere('p.id != :user')
                     ->setParameter('user', $user);
 
-        }
-        if (($searchData->isPassees)) {
-            $date = new \DateTime('now');
-            dump($date);
-            $date->modify('1 month ago');
-            dump($date);
-            $res = $res
-                ->andWhere('s.dateHeureDebut <= :date')
-                ->setParameter('date', $date);
-        }
+            }
+            if (($searchData->isPassees)) {
+                $date = new \DateTime('now');
+                dump($date);
+                $date->modify('1 month ago');
+                dump($date);
+                $res = $res
+                    ->andWhere('s.dateHeureDebut <= :date')
+                    ->setParameter('date', $date);
+            }
 
-        return $res
-            ->getQuery()
-            ->getResult();
 
+        }
+        return $res->getQuery()->getResult();
     }
+}
 //    /**
 //     * @return Sortie[] Returns an array of Sortie objects
 //     */
@@ -134,4 +134,4 @@ class SortieRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-}
+

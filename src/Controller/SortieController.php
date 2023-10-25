@@ -18,11 +18,11 @@ use Symfony\Contracts\Service\Attribute\Required;
 class SortieController extends AbstractController
 {
     #[Route(path: '/sortie', name: 'app_sortie')]
-    public function createSortie(Request $request,EntityManagerInterface $em): Response
+    public function createSortie(Request $request, EntityManagerInterface $em): Response
     {
         $sortie = new Sortie();
         $sortie->setOrganisateur($this->getUser());
-        $sortie->setEtat($em->getRepository(Etat::class)->find(10));
+        $sortie->setEtat($em->getRepository(Etat::class)->find(1));
         $sortie->setCampus(campus: $this->getUser()->getCampus());
         $sortie->setDateHeureDebut(new \DateTime());
         $sortie->setDateLimiteInscription(new \DateTime());
@@ -58,6 +58,7 @@ class SortieController extends AbstractController
         return $this->render('sortie/index.html.twig', [
 
             'creationSortie' => $creationSortie->createView(),
+            'sortie' => $sortie,
         ]);
     }
 
@@ -74,11 +75,12 @@ class SortieController extends AbstractController
             'controller_name' => 'SortieController',
             'searchForm' => $form->createView(),
             'sorties' => $sorties,
+
         ]);
     }
 
     #[Route(path: '/inscription/{id}', name: 'inscription_sortie', requirements: ['id' => '\d+'])]
-    public function inscriptionSortie(EntityManagerInterface $em,Sortie $sortie): Response
+    public function inscriptionSortie(EntityManagerInterface $em, Sortie $sortie): Response
     {
         $participant = $this->getUser();
 
@@ -94,14 +96,14 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('app_main');
 
     }
-    #[Route(path:'/desinscription/{id}',name: 'desinscription_sortie', requirements: ['id' => '\d+'])]
-    public function desinscription(Sortie $sortie): Response
-    {
-        $participant=$this->getUser();
 
-        if($sortie->getParticipants()->contains($participant)){
+    #[Route(path: '/desinscription/{id}', name: 'desinscription_sortie', requirements: ['id' => '\d+'])]
+    public function desinscription(Sortie $sortie, EntityManagerInterface $em): Response
+    {
+        $participant = $this->getUser();
+
+        if ($sortie->getParticipants()->contains($participant)) {
             $sortie->removeParticipant($participant);
-            $em=$this->getDoctrine()->getManager();
             $em->persist($sortie);
             $em->flush();
         }
@@ -118,7 +120,7 @@ class SortieController extends AbstractController
 
     }
 
-    #[Route(path: 'sortie/modifier/{id}', name: 'sortie_modifier')]
+    #[Route(path: '/sortie/modifier/{id}', name: 'sortie_modifier')]
     public function modifierSortie(Sortie $sortie, Request $request): Response
     {
 
@@ -127,7 +129,7 @@ class SortieController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $lieu=$sortie->getLieu();
+            $lieu = $sortie->getLieu();
             $ville = $lieu->getVille();
             if ($ville->getId() === null) {
                 $em->persist($ville);
@@ -149,7 +151,16 @@ class SortieController extends AbstractController
             'sortie' => $sortie,
         ]);
     }
-    public function publierSortie
+
+    #[Route(path: 'sortie/publier/{id}', name: 'sortie_publier')]
+    public function publierSortie(Sortie $sortie, EntityManagerInterface $em): Response
+    {
+        $sortie->setEtat($em->getRepository(Etat::class)->find(2));
+        $em->persist($sortie);
+        $em->flush();
+        return $this->redirectToRoute('app_main');
+    }
+
 
 }
 
