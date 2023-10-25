@@ -89,11 +89,11 @@ class SortieController extends AbstractController
             $em->persist($sortie);
             $em->flush();
 
-            return $this->redirectToRoute('app_main');
+            return $this->redirectToRoute('app_sorties');
 
 
         }
-        return $this->redirectToRoute('app_main');
+        return $this->redirectToRoute('app_sorties');
 
     }
 
@@ -107,7 +107,7 @@ class SortieController extends AbstractController
             $em->persist($sortie);
             $em->flush();
         }
-        return $this->redirectToRoute('app_main');
+        return $this->redirectToRoute('app_sorties');
 
     }
 
@@ -158,7 +158,7 @@ class SortieController extends AbstractController
         $sortie->setEtat($em->getRepository(Etat::class)->find(2));
         $em->persist($sortie);
         $em->flush();
-        return $this->redirectToRoute('app_main');
+        return $this->redirectToRoute('app_sorties');
     }
 
 
