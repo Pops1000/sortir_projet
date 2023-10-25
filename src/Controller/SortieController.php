@@ -13,6 +13,7 @@ use App\Form\CreationSortieType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class SortieController extends AbstractController
 {
@@ -21,7 +22,7 @@ class SortieController extends AbstractController
     {
         $sortie = new Sortie();
         $sortie->setOrganisateur($this->getUser());
-        $sortie->setEtat($em->getRepository(Etat::class)->find(1));
+        $sortie->setEtat($em->getRepository(Etat::class)->find(10));
         $sortie->setCampus(campus: $this->getUser()->getCampus());
         $sortie->setDateHeureDebut(new \DateTime());
         $sortie->setDateLimiteInscription(new \DateTime());
@@ -76,15 +77,13 @@ class SortieController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/inscription/{id}', name: 'inscription_sortie')]
-    public function inscriptionSortie(Sortie $sortie): Response
+    #[Route(path: '/inscription/{id}', name: 'inscription_sortie', requirements: ['id' => '\d+'])]
+    public function inscriptionSortie(EntityManagerInterface $em,Sortie $sortie): Response
     {
         $participant = $this->getUser();
 
         if (!$sortie->getParticipants()->contains($participant)) {
             $sortie->addParticipant($participant);
-
-            $em = $this->getDoctrine()->getManager();
             $em->persist($sortie);
             $em->flush();
 
@@ -95,7 +94,7 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('app_main');
 
     }
-    #[Route(path:'/desinscription/{id}',name: 'desinscription_sortie')]
+    #[Route(path:'/desinscription/{id}',name: 'desinscription_sortie', requirements: ['id' => '\d+'])]
     public function desinscription(Sortie $sortie): Response
     {
         $participant=$this->getUser();

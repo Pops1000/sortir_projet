@@ -77,34 +77,26 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('dateFin', $dateFin);
         }
         if (($searchData->isOrganisateur)) {
-            if (is_null($user)) {
-                $res = [];
-            } else {
                 $res = $res
                     ->andWhere('s.organisateur IN :organisateur')
                     ->setParameter('organisateur', $user);
-            }
         }
         if (($searchData->isInscrit)) {
-            if (is_null($user)) {
-                $res = [];
-            } else {
                 $res = $res
                     ->andWhere('p.id = :user')
                     ->setParameter('user', $user);
-            }
         }
         if (($searchData->isNotInscrit)) {
-            if (is_null($user)) {
-                $res = [];
-            } else {
-                $res = $res
+            $res = $res
                     ->andWhere('p.id != :user')
                     ->setParameter('user', $user);
-            }
+
         }
         if (($searchData->isPassees)) {
-            $date = $searchData->dateFin->modify('+1 month');
+            $date = new \DateTime('now');
+            dump($date);
+            $date->modify('1 month ago');
+            dump($date);
             $res = $res
                 ->andWhere('s.dateHeureDebut <= :date')
                 ->setParameter('date', $date);
