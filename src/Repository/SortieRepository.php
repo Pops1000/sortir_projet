@@ -77,6 +77,9 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('dateFin', $dateFin);
         }
         if (($searchData->isOrganisateur)) {
+            if (is_null($user)) {
+                $res = [];
+            } else {
                 $res = $res
                     ->andWhere('s.organisateur IN :organisateur')
                     ->setParameter('organisateur', $user);

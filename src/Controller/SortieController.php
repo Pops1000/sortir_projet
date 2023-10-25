@@ -149,7 +149,7 @@ class SortieController extends AbstractController
             'sortie' => $sortie,
         ]);
     }
-
+    public function publierSortie
 
 }
 
