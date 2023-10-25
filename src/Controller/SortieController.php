@@ -77,7 +77,7 @@ class SortieController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/inscription/{id}', name: "inscription_sortie")]
+    #[Route(path: '/inscription/{id}', name: 'inscription_sortie')]
     public function inscriptionSortie(Sortie $sortie): Response
     {
         $participant = $this->getUser();
@@ -86,7 +86,8 @@ class SortieController extends AbstractController
             $sortie->addParticipant($participant);
 
             $em = $this->getDoctrine()->getManager();
-            $em->flush();;
+            $em->persist($sortie);
+            $em->flush();
 
             return $this->redirectToRoute('app_main');
 
@@ -95,8 +96,22 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('app_main');
 
     }
+    #[Route(path:'/desinscription/{id}',name: 'desinscription_sortie')]
+    public function desinscription(Sortie $sortie): Response
+    {
+        $participant=$this->getUser();
 
-    #[Route("/sortie/{id}", name: "sortie_detail")]
+        if($sortie->getParticipants()->contains($participant)){
+            $sortie->removeParticipant($participant);
+            $em=$this->getDoctrine()->getManager();
+            $em->persist($sortie);
+            $em->flush();
+        }
+        return $this->redirectToRoute('app_main');
+
+    }
+
+    #[Route('/sortie/{id}', name: 'sortie_detail')]
     public function sortieDetails(Sortie $sortie): Response
     {
         return $this->render('sortie/detail.html.twig', [
@@ -105,7 +120,7 @@ class SortieController extends AbstractController
 
     }
 
-    #[Route(path: "sortie/modifier/{id}", name: "sortie_modifier")]
+    #[Route(path: 'sortie/modifier/{id}', name: 'sortie_modifier')]
     public function modifierSortie(Sortie $sortie, Request $request): Response
     {
 
