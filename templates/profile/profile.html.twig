@@ -4,43 +4,27 @@
 
 {% form_theme profileForm "bootstrap_3_layout.html.twig" %}
 
+{%  block titre %}
+    Mon profil
+{% endblock %}
 
 {% block body %}
     <div class="example-wrapper">
-        <h1 class="text-center">Salut {{ app.user.prenom }}! </h1>
+        {{ form_start(profileForm) }}
 
-
-        <div>
-            {{ form_start(profileForm) }}
-
-            {{ form_errors(profileForm) }}
-
-            {{ form_row(profileForm.pseudo) }}
-            {{ form_row(profileForm.prenom) }}
-            {{ form_row(profileForm.nom) }}
-            {{ form_row(profileForm.telephone) }}
-            {{ form_row(profileForm.mail)}}
-            {{ form_row(profileForm.newPassword) }}
-
-            {# {% if is_granted("ROLE_ADMIN") %}
-                {{ form_row(profileForm.campus) }}
-            {% endif %} #}
-            {{ form_row(profileForm.campus) }}
-            {#  <label for="campus">Campus</label>
-        <input type="text"
-               id="campus"
-               name="campus"
-               value="{{ app.user.campus.nom }}"
-               readonly> #}
-
-{# TODO n'afficher le bouton que si  un champ a été modifié#}
-            <button type="submit" class=" btn btn-primary">Modifier</button>
-
-            {{ form_end(profileForm) }}
-
-
-
-        </div>
-
+        {{ form_errors(profileForm) }}
+        {{ form_label(profileForm.pseudo) }}
+        {{ form_widget(profileForm.pseudo) }}
+        {{ form_row(profileForm.prenom) }}
+        {{ form_row(profileForm.nom) }}
+        {{ form_row(profileForm.telephone) }}
+        {{ form_row(profileForm.mail)}}
+        {{ form_row(profileForm.newPassword) }}
+        {{ form_row(profileForm.campus) }}
     </div>
+{% endblock %}
+
+{% block footer %}
+    <button type="submit" class=" btn btn-primary">Modifier</button>
+    {{ form_end(profileForm) }}
 {% endblock %}
