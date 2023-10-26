@@ -6,6 +6,8 @@ use App\Data\SearchData;
 use App\Entity\Participant;
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -50,7 +52,22 @@ class SortieRepository extends ServiceEntityRepository
             ->addSelect('o')
             ->join('s.organisateur', 'o')
             ->addSelect('p')
-            ->join('s.participants', 'p');
+            ->join('s.participants', 'p')
+
+            ->where('s.organisateur = :user AND e.libelle != :libelleArchivee')
+            ->orWhere('s.organisateur != :user AND e.libelle != :libelleArchivee AND e.libelle != :libelleCree')
+
+
+
+            ->setParameters([
+                'user' => $user,
+                'libelleCree'=> "Crée",
+                'libelleArchivee'=> "Archivée"
+        ]);
+
+
+
+
 
         if (!is_null($searchData->q)) {
             $res = $res

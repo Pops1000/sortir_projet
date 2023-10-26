@@ -18,8 +18,12 @@
         {{ form_row(sortieForm.lieu) }}
 
 
-        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-        <a href="{{ path('sortie_publier', {'id': sortie.id}) }}" class="btn btn-success">Publier</a>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        {%  if sortie.etat.libelle == "Crée" %}
+        <a href="{{ path('sortie_publier', {'id': sortie.id}) }}" class="btn btn-success">Publier la sortie</a>
+        {%  endif %}
+        <a  href="{{ path('sortie_supprimer', {'id': sortie.id}) }}" class="btn btn-danger">Supprimer la sortie</a>
+        <a  href="{{ path('app_sorties') }}" class="btn btn-danger">Annuler</a>
 
         {{ form_end(sortieForm) }}
     </div>

@@ -15,14 +15,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Service\Attribute\Required;
 
+#[Route(path: '/sortie')]
 class SortieController extends AbstractController
 {
-    #[Route(path: '/sortie', name: 'app_sortie')]
+    #[Route(path: '', name: 'app_sortie')]
     public function createSortie(Request $request, EntityManagerInterface $em): Response
     {
         $sortie = new Sortie();
         $sortie->setOrganisateur($this->getUser());
-        $sortie->setEtat($em->getRepository(Etat::class)->find(1));
+        $sortie->setEtat($em->getRepository(Etat::class)->findOneBy(['libelle'=>"Crée"]));
         $sortie->setCampus(campus: $this->getUser()->getCampus());
         $sortie->setDateHeureDebut(new \DateTime());
         $sortie->setDateLimiteInscription(new \DateTime());
@@ -35,28 +36,22 @@ class SortieController extends AbstractController
             $lieu = $sortie->getLieu();
             $ville = $lieu->getVille();
 
-
             if ($ville->getId() === null) {
                 $em->persist($ville);
             }
-
 
             if ($lieu->getId() === null) {
                 $em->persist($lieu);
             }
 
-
             $em->persist($lieu);
-
             $em->persist($sortie);
             $em->flush();
 
             return $this->redirectToRoute(route: 'app_sorties');
         }
 
-
         return $this->render('sortie/index.html.twig', [
-
             'creationSortie' => $creationSortie->createView(),
             'sortie' => $sortie,
         ]);
@@ -111,7 +106,7 @@ class SortieController extends AbstractController
 
     }
 
-    #[Route('/sortie/{id}', name: 'sortie_detail')]
+    #[Route('/{id}', name: 'sortie_detail')]
     public function sortieDetails(Sortie $sortie): Response
     {
         return $this->render('sortie/detail.html.twig', [
@@ -120,7 +115,7 @@ class SortieController extends AbstractController
 
     }
 
-    #[Route(path: '/sortie/modifier/{id}', name: 'sortie_modifier')]
+    #[Route(path: '/modifier/{id}', name: 'sortie_modifier')]
     public function modifierSortie(Sortie $sortie, Request $request): Response
     {
 
@@ -152,11 +147,19 @@ class SortieController extends AbstractController
         ]);
     }
 
-    #[Route(path: 'sortie/publier/{id}', name: 'sortie_publier')]
+    #[Route(path: '/publier/{id}', name: 'sortie_publier')]
     public function publierSortie(Sortie $sortie, EntityManagerInterface $em): Response
     {
-        $sortie->setEtat($em->getRepository(Etat::class)->find(2));
+        $sortie->setEtat($em->getRepository(Etat::class)->findOneBy(['libelle'=>"Ouverte"]));
         $em->persist($sortie);
+        $em->flush();
+        return $this->redirectToRoute('app_sorties');
+    }
+
+    #[Route(path: '/supprimer/{id}', name: 'sortie_supprimer')]
+    public function supprimerSortie(Sortie $sortie, EntityManagerInterface $em): Response
+    {
+        $em->remove($sortie);
         $em->flush();
         return $this->redirectToRoute('app_sorties');
     }
