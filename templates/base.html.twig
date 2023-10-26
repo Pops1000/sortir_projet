@@ -43,8 +43,26 @@
     {% endif %}
 {% endfor %}
 
-{% block body %}
+<div class="example-wrapper card bg-light shadow-lg">
+    <div class="card-header bg-primary bg-gradient">
+        <h2 class="card-title text-white text-center">
+            {% block titre %}
+            {% endblock %}
+        </h2>
+    </div>
 
-{% endblock %}
+
+    <div class="card-body">
+        {% block body %}
+        {% endblock %}
+        <footer class="text-center">
+            {% block footer %}
+            {% endblock %}
+        </footer>
+
+
+    </div>
+</div>
+
 </body>
 </html>

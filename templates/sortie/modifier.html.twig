@@ -3,28 +3,26 @@
 {% block title %}Modifier la Sortie{{ sortie.nom }}{% endblock %}
 {% form_theme sortieForm "bootstrap_3_layout.html.twig" %}
 
-{% block body %}
-    <div class="example-wrapper">
-        <h1 class="text-center">Modifier la Sortie "{{ sortie.nom }}"</h1>
-
-        {{ form_start(sortieForm) }}
-
-        {{ form_row(sortieForm.nom) }}
-        {{ form_row(sortieForm.dateHeureDebut) }}
-        {{ form_row(sortieForm.duree) }}
-        {{ form_row(sortieForm.dateLimiteInscription) }}
-        {{ form_row(sortieForm.nbInscriptionsMax) }}
-        {{ form_row(sortieForm.infosSortie) }}
-        {{ form_row(sortieForm.lieu) }}
-
-
-        <button type="submit" class="btn btn-primary">Enregistrer</button>
-        {%  if sortie.etat.libelle == "Crée" %}
-        <a href="{{ path('sortie_publier', {'id': sortie.id}) }}" class="btn btn-success">Publier la sortie</a>
-        {%  endif %}
-        <a  href="{{ path('sortie_supprimer', {'id': sortie.id}) }}" class="btn btn-danger">Supprimer la sortie</a>
-        <a  href="{{ path('app_sorties') }}" class="btn btn-danger">Annuler</a>
-
-        {{ form_end(sortieForm) }}
-    </div>
+{% block titre %}
+    Modifier la Sortie {{ sortie.nom }}
 {% endblock %}
+{% block body %}
+    {{ form_start(sortieForm) }}
+    {{ form_row(sortieForm.nom) }}
+    {{ form_row(sortieForm.dateHeureDebut) }}
+    {{ form_row(sortieForm.duree) }}
+    {{ form_row(sortieForm.dateLimiteInscription) }}
+    {{ form_row(sortieForm.nbInscriptionsMax) }}
+    {{ form_row(sortieForm.infosSortie) }}
+    {{ form_row(sortieForm.lieu) }}
+{% endblock %}
+{% block footer %}
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    {%  if sortie.etat.libelle == "Crée" %}
+        <a href="{{ path('sortie_publier', {'id': sortie.id}) }}" class="btn btn-success">Publier la sortie</a>
+    {%  endif %}
+    <a  href="{{ path('sortie_supprimer', {'id': sortie.id}) }}" class="btn btn-danger">Supprimer la sortie</a>
+    <a  href="{{ path('app_sorties') }}" class="btn btn-danger">Annuler</a>
+    {{ form_end(sortieForm) }}
+{% endblock %}
+

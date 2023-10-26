@@ -2,11 +2,14 @@
 
 {% block title %}Sorties{% endblock %}
 {% form_theme searchForm "bootstrap_3_layout.html.twig" %}
+
+{% block titre %}
+    Filtrer les sorties
+{% endblock %}
 {% block body %}
 
-    <form class="container">
+    <form class="fs-6">
         {{ form_start(searchForm) }}
-        <h1>Filtrer les sorties</h1>
         <div class="row">
             <div class="col-md-5">
                 {{ form_row(searchForm.campus) }}
@@ -21,7 +24,7 @@
                 </div>
 
             </div>
-            <div class="col-md-5">
+            <div class="col-md-5 ">
                 {{ form_row(searchForm.isOrganisateur) }}
                 {{ form_row(searchForm.isInscrit) }}
                 {{ form_row(searchForm.isNotInscrit) }}
@@ -50,7 +53,7 @@
         </thead>
         <tbody>
         {% for sortie in sorties %}
-            <tr>
+            <tr class="fs-6">
                 <td>{{ sortie.nom }}</td>
                 <td>{{ sortie.dateHeureDebut|date("d/m/y H:i") }}</td>
                 <td>{{ sortie.dateLimiteInscription | date("d/m/y H:i") }}</td>
