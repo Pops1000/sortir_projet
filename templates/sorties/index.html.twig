@@ -60,7 +60,9 @@
                 <td>{{ sortie.organisateur.pseudo }}</td>
                 <td>
                     <a href="{{ path('sortie_modifier',{'id':sortie.id}) }}">Modifier</a>
+                    {% if sortie.etat.libelle == "Ouverte"%}
                     <a href="{{ path('inscription_sortie',{'id': sortie.id}) }}">S'inscrire</a>
+                    {% endif %}
                     <a href="{{ path('sortie_detail',{'id':sortie.id}) }}">Afficher</a>
                     {% if sortie.isParticipant(app.user) %}
                         <a href="{{ path('desinscription_sortie',{'id':sortie.id }) }}">Se désinscrire</a>

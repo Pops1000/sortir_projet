@@ -6,6 +6,7 @@ use App\Data\SearchData;
 use App\Entity\Etat;
 use App\Entity\Sortie;
 use App\Form\FilterSortiesType;
+use Cassandra\Date;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Form\CreationSortieType;
@@ -60,6 +61,18 @@ class SortieController extends AbstractController
     #[Route(path: '/sorties', name: 'app_sorties')]
     public function sorties(EntityManagerInterface $em, Request $request): Response
     {
+        $participant = $this->getUser();
+        if($participant == null){
+            return $this->redirectToRoute('app_login');
+        }
+// Si le compte est désactivé, déconnecte aussitot et TODO redirige vers une page d'alerte
+        if ($participant->isIsActif() == false) {
+            $this->container->get('security.token_storage')->setToken(null);
+            $this->container->get('session')->invalidate();
+            return $this->redirectToRoute('app_login');
+
+            // return $this->render('profile/desactive.html.twig');
+        }
         $data = new SearchData();
 
         $form = $this->createForm(FilterSortiesType::class, $data);
@@ -80,6 +93,7 @@ class SortieController extends AbstractController
         $participant = $this->getUser();
 
         if (!$sortie->getParticipants()->contains($participant)) {
+           // if (new Date(now) $sortie->)  /////////////////////////////
             $sortie->addParticipant($participant);
             $em->persist($sortie);
             $em->flush();
@@ -93,12 +107,13 @@ class SortieController extends AbstractController
     }
 
     #[Route(path: '/desinscription/{id}', name: 'desinscription_sortie', requirements: ['id' => '\d+'])]
-    public function desinscription(Sortie $sortie, EntityManagerInterface $em): Response
+    public function desinscription(Sortie $sortie): Response
     {
         $participant = $this->getUser();
 
         if ($sortie->getParticipants()->contains($participant)) {
             $sortie->removeParticipant($participant);
+            $em = $this->getDoctrine()->getManager();
             $em->persist($sortie);
             $em->flush();
         }
@@ -116,14 +131,13 @@ class SortieController extends AbstractController
     }
 
     #[Route(path: '/modifier/{id}', name: 'sortie_modifier')]
-    public function modifierSortie(Sortie $sortie, Request $request): Response
+    public function modifierSortie(Sortie $sortie, Request $request, EntityManagerInterface $em): Response
     {
 
         $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
         $sortieForm->handleRequest($request);
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $lieu = $sortie->getLieu();
             $ville = $lieu->getVille();
             if ($ville->getId() === null) {

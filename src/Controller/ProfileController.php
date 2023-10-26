@@ -20,12 +20,6 @@ class ProfileController extends AbstractController
     {
 
         $participant = $this->getUser();
-// Si le compte est désactivé, déconnecte aussitot et TODO redirige vers une page d'alerte
-        if($participant->isIsActif()==false){
-            return $this->redirectToRoute('app_logout');
-
-           // return $this->render('profile/desactive.html.twig');
-        }
 
         $profileForm = $this->createForm(ProfileType::class, $participant);
 

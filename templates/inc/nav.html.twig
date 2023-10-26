@@ -1,7 +1,7 @@
 
 <div class="container">
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <a href="{{ path('app_sorties') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
             <svg class="bi me-2" width="40" height="32"></svg>
             <span class="fs-4">Sortir.com</span>
         </a>
@@ -17,6 +17,9 @@
             <li class="nav-item"><a href="{{ path('app_profile') }}" class="nav-link">Mon profil</a></li>
             {% endif %}
 
+            {% if is_granted('ROLE_ADMIN') %}
+            <li class="nav-item"><a href="#" class="nav-link">Ajouter Utilisateur</a></li>
+            {% endif %}
 
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <li class="nav-item"><a href="{{ path('app_sortie') }}" class="nav-link">Créer une Sortie</a></li>
