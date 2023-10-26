@@ -80,7 +80,6 @@ class SortieController extends AbstractController
 
         $sorties = $em->getRepository(Sortie::class)->findByFilter($data, $this->getUser());
 
-
         return $this->render('sorties/index.html.twig', [
             'controller_name' => 'SortieController',
             'searchForm' => $form->createView(),
@@ -95,8 +94,8 @@ class SortieController extends AbstractController
         $participant = $this->getUser();
         //$maintenant = new \DateTime();
 
-       // $heureDebut = $sortie->getDateHeureDebut();
-        //$archivage = $heureDebut->modify('+1 month');
+//        $heureDebut = $sortie->getDateHeureDebut();
+//        $archivage = $heureDebut->modify('+1 month');
 
         if (!$sortie->getParticipants()->contains($participant)) {
 //            if ($maintenant>= $heureDebut && $maintenant< $archivage) {
