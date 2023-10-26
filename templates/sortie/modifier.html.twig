@@ -19,6 +19,8 @@
 
 
         <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+        <a href="{{ path('sortie_publier', {'id': sortie.id}) }}" class="btn btn-success">Publier</a>
+
         {{ form_end(sortieForm) }}
     </div>
 {% endblock %}

@@ -17,9 +17,6 @@
             <li class="nav-item"><a href="{{ path('app_profile') }}" class="nav-link">Mon profil</a></li>
             {% endif %}
 
-            {% if is_granted('ROLE_ADMIN') %}
-            <li class="nav-item"><a href="{{ path('app_test') }}" class="nav-link">Ajouter Utilisateur</a></li>
-            {% endif %}
 
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <li class="nav-item"><a href="{{ path('app_sortie') }}" class="nav-link">Créer une Sortie</a></li>
