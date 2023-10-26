@@ -64,7 +64,7 @@
                     {% endif %}
 
                     {% if not sortie.isParticipant(app.user) and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                        <a href="{{ path('inscription_sortie',{'id': sortie.id}) }}">S'iscrire</a>
+                        <a href="{{ path('inscription_sortie',{'id': sortie.id}) }}">S'inscrire</a>
                     {% endif %}
                     <a href="{{ path('sortie_detail',{'id':sortie.id}) }}">Afficher</a>
                     {% if sortie.isParticipant(app.user) %}

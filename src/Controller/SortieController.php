@@ -95,13 +95,12 @@ class SortieController extends AbstractController
 
     }
     #[Route(path:'/desinscription/{id}',name: 'desinscription_sortie', requirements: ['id' => '\d+'])]
-    public function desinscription(Sortie $sortie): Response
+    public function desinscription(EntityManagerInterface $em,Sortie $sortie): Response
     {
         $participant=$this->getUser();
 
         if($sortie->getParticipants()->contains($participant)){
             $sortie->removeParticipant($participant);
-            $em=$this->getDoctrine()->getManager();
             $em->persist($sortie);
             $em->flush();
         }

@@ -12,10 +12,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-#[Route('/profile', name: 'app_')]
+#[Route(path:'/profile', name: 'app_')]
 class ProfileController extends AbstractController
 {
-    #[Route('', name: 'profile')]
+    #[Route(path:'', name: 'profile')]
     public function index(EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
 
@@ -64,6 +64,13 @@ class ProfileController extends AbstractController
 
         return $this->render('profile/profile.html.twig', [
             'profileForm' => $profileForm->createView()
+        ]);
+    }
+    #[Route(path:'/{id}', name: 'profile_display', requirements: ['id' => '\d+'])]
+    public function displayProfile(Participant $participant): Response
+    {
+        return $this->render('profile/display.html.twig', [
+            'participant' => $participant
         ]);
     }
 }
