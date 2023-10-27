@@ -89,21 +89,18 @@ class SortieRepository extends ServiceEntityRepository
         }
         if (($searchData->isOrganisateur)) {
             $res = $res
-                ->andWhere('s.organisateur IN :organisateur')
-                ->setParameter('organisateur', $user);
+                ->andWhere('s.organisateur = :user')
+                ->setParameter('user', $user);
         }
         if (($searchData->isInscrit)) {
             $res = $res
-                ->andWhere(':user IN p')
+                ->andWhere(':user IN (p)')
                 ->setParameter('user', $user);
         }
         if (($searchData->isNotInscrit)) {
             $res = $res
-                ->andWhere(':user NOT IN :p')
-                ->setParameters([
-                    'user' => $user,
-                    'p' => $user
-                ]);
+                ->andWhere(':user NOT IN (p)')
+                ->setParameter('user', $user);
 
         }
         if (($searchData->isPassees)) {
