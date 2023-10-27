@@ -10,10 +10,11 @@ class VilleFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        $faker = \Faker\Factory::create();
         for ($i = 1; $i <= 10; $i++) {
             $ville = new Ville();
-            $ville->setNom("Ville $i");
-            $ville->setCodePostal( random_int(1000, 9999));
+            $ville->setNom($faker->city());
+            $ville->setCodePostal(random_int(1000, 9999));
             $manager->persist($ville);
         }
         $manager->flush();

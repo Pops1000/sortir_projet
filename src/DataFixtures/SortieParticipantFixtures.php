@@ -24,6 +24,7 @@ class SortieParticipantFixtures extends Fixture implements DependentFixtureInter
 
     public function load(ObjectManager $manager): void
     {
+        $faker = \Faker\Factory::create();
         $participants = [];
         $campus = $manager->getRepository(Campus::class)->findAll();
         $etat = $manager->getRepository(Etat::class)->findAll();
@@ -32,8 +33,8 @@ class SortieParticipantFixtures extends Fixture implements DependentFixtureInter
             $participant = new Participant();
 
             $participant->setMail("participant$i@example.com");
-            $participant->setNom("Nom$i");
-            $participant->setPrenom("Prenom$i");
+            $participant->setNom($faker->lastName());
+            $participant->setPrenom($faker->firstName());
             $participant->setTelephone("Telephone$i");
             $participant->setPseudo("Pseudo$i");
             $participant->setMotPasse("mdp");
@@ -41,7 +42,7 @@ class SortieParticipantFixtures extends Fixture implements DependentFixtureInter
 
             $isAdmin = (bool)random_int(0, 1);
             $participant->setIsAdministrateur($isAdmin);
-            $isActif = (bool)random_int(0, 1);
+            $isActif = true;
             $participant->setActif($isActif);
             $randomCampus = $campus[array_rand($campus)];
             $participant->setCampus($randomCampus);
@@ -60,11 +61,8 @@ class SortieParticipantFixtures extends Fixture implements DependentFixtureInter
             $sortie = new Sortie();
             $sortie->setNom("Sortie$i");
             $dateHeureDebut = new \DateTime();
-            $dateHeureDebut->modify("+$i days");
-            $sortie->setDateHeureDebut($dateHeureDebut);
-            $dateLimiteInscription = new \DateTime();
-            $dateLimiteInscription->modify("+$i days");
-            $sortie->setDateLimiteInscription($dateLimiteInscription);
+            $sortie->setDateHeureDebut($faker->dateTimeBetween('-6 months', 'now'));
+            $sortie->setDateLimiteInscription($faker->dateTimeBetween($sortie->getDateHeureDebut(), '+2 month'));
             $sortie->setDuree($i + 2);
             $sortie->setNbInscriptionsMax($i + 10);
             $sortie->setInfosSortie("info$i");
@@ -99,8 +97,6 @@ class SortieParticipantFixtures extends Fixture implements DependentFixtureInter
             VilleFixtures::class,
             CampusFixtures::class,
             LieuFixtures::class,
-
-
         ];
     }
 }
