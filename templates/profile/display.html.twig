@@ -1,17 +1,22 @@
 {% extends 'base.html.twig' %}
-{%  block title %} Profil: {{ participant.pseudo }} {% endblock %}
+{% block title %} Profil: {{ participant.pseudo }} {% endblock %}
+{% block titre%}
+{{ participant.pseudo }}
+{% endblock %}
 {% block body %}
     <div class="example-wrapper">
-        <h1 class="text-center">{{ participant.pseudo }}</h1>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <img src="{{ asset('img/avatar.svg') }}" alt="avatar" class="img-thumbnail">
+            </div>
+            <div class="col-md-4">
                 <p>Prénom:</p>
                 <p>Nom:</p>
                 <p>Téléphone</p>
                 <p>Email:</p>
                 <p>Campus:</p>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <p>{{ participant.prenom }}</p>
                 <p>{{ participant.nom }}</p>
                 <p>{{ participant.telephone }}</p>

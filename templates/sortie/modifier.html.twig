@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Modifier la Sortie{{ sortie.nom }}{% endblock %}
+{% block title %}Modifier la sortie - {{ sortie.nom }}{% endblock %}
 {% form_theme sortieForm "bootstrap_3_layout.html.twig" %}
 
 {% block titre %}
-    Modifier la Sortie {{ sortie.nom }}
+    Modifier la sortie: {{ sortie.nom }}
 {% endblock %}
 {% block body %}
     {{ form_start(sortieForm) }}
@@ -17,12 +17,12 @@
     {{ form_row(sortieForm.lieu) }}
 {% endblock %}
 {% block footer %}
-    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <button type="submit" class="btn btn-success">Enregistrer</button>
     {%  if sortie.etat.libelle == "Crée" %}
         <a href="{{ path('sortie_publier', {'id': sortie.id}) }}" class="btn btn-success">Publier la sortie</a>
     {%  endif %}
     <a  href="{{ path('sortie_supprimer', {'id': sortie.id}) }}" class="btn btn-danger">Supprimer la sortie</a>
-    <a  href="{{ path('app_sorties') }}" class="btn btn-danger">Annuler</a>
+    <a  href="{{ path('app_sorties') }}" class="btn btn-warning">Annuler</a>
     {{ form_end(sortieForm) }}
 {% endblock %}
 

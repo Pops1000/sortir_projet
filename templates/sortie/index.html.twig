@@ -4,7 +4,7 @@
 {% form_theme creationSortie "bootstrap_3_layout.html.twig" %}
 
 {% block titre %}
-    Creation d'une sortie
+    Creation de sortie
 {% endblock %}
 {% block body %}
 <div class="example-wrapper">
@@ -20,8 +20,8 @@
 
 {% endblock %}
 {% block footer %}
-    <button type="submit" class="btn btn-primary">Enregistrer</button>
-    <a  href="{{ path('app_sorties') }}" class="btn btn-danger">Annuler</a>
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+    <a  href="{{ path('app_sorties') }}" class="btn btn-warning">Annuler</a>
     {{ form_end(creationSortie) }}
 </div>
 {% endblock %}

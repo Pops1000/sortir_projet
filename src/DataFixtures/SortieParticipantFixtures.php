@@ -56,7 +56,7 @@ class SortieParticipantFixtures extends Fixture implements DependentFixtureInter
         $manager->flush();
 
 
-        for ($i = 1; $i <= 6; $i++) {
+        for ($i = 1; $i <= 50; $i++) {
             $sortie = new Sortie();
             $sortie->setNom("Sortie$i");
             $dateHeureDebut = new \DateTime();

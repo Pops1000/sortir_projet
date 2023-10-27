@@ -57,17 +57,11 @@ class SortieRepository extends ServiceEntityRepository
             ->where('s.organisateur = :user AND e.libelle != :libelleArchivee')
             ->orWhere('s.organisateur != :user AND e.libelle != :libelleArchivee AND e.libelle != :libelleCree')
 
-
-
             ->setParameters([
                 'user' => $user,
                 'libelleCree'=> "Crée",
                 'libelleArchivee'=> "Archivée"
         ]);
-
-
-
-
 
         if (!is_null($searchData->q)) {
             $res = $res
@@ -94,37 +88,39 @@ class SortieRepository extends ServiceEntityRepository
                 ->setParameter('dateFin', $dateFin);
         }
         if (($searchData->isOrganisateur)) {
-            if (is_null($user)) {
-                $res = [];
-            } else {
-                $res = $res
-                    ->andWhere('s.organisateur IN :organisateur')
-                    ->setParameter('organisateur', $user);
-            }
-            if (($searchData->isInscrit)) {
-                $res = $res
-                    ->andWhere('p.id = :user')
-                    ->setParameter('user', $user);
-            }
-            if (($searchData->isNotInscrit)) {
-                $res = $res
-                    ->andWhere('p.id != :user')
-                    ->setParameter('user', $user);
-
-            }
-            if (($searchData->isPassees)) {
-                $date = new \DateTime('now');
-                dump($date);
-                $date->modify('1 month ago');
-                dump($date);
-                $res = $res
-                    ->andWhere('s.dateHeureDebut <= :date')
-                    ->setParameter('date', $date);
-            }
-
+            $res = $res
+                ->andWhere('s.organisateur IN :organisateur')
+                ->setParameter('organisateur', $user);
+        }
+        if (($searchData->isInscrit)) {
+            $res = $res
+                ->andWhere(':user IN p')
+                ->setParameter('user', $user);
+        }
+        if (($searchData->isNotInscrit)) {
+            $res = $res
+                ->andWhere(':user NOT IN :p')
+                ->setParameters([
+                    'user' => $user,
+                    'p' => $user
+                ]);
 
         }
-        return $res->getQuery()->getResult();
+        if (($searchData->isPassees)) {
+            //$date = new \DateTime('now');
+            //$date->modify('1 month ago');
+            //$res = $res
+            //    ->andWhere('s.dateHeureDebut <= :date')
+            //    ->setParameter('date', $date);
+            $res = $res
+                ->andWhere('e.libelle = :libellePasse')
+                ->setParameter('libellePasse', "Passée");
+        }
+
+        return $res
+            ->orderBy('s.dateHeureDebut', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }
 //    /**
